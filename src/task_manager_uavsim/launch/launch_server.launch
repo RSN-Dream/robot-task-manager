@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<launch>
+    <node name="quad1_tasks" pkg="task_manager_uavsim" type="task_server_uavsim"  output="screen">
+        <param name="lib_path" value="$(find task_manager_uavsim)/tasks"/>
+        <param name="my_id" value="1"/>
+        <param name="my_name" value="partner1"/>
+        <remap from="~/partner1" to="/quad2_tasks/sync"/>
+    </node>
+
+    <node name="quad2_tasks" pkg="task_manager_uavsim" type="task_server_uavsim"  output="screen">
+        <param name="lib_path" value="$(find task_manager_uavsim)/tasks"/>
+        <param name="my_id" value="2"/>
+        <param name="my_name" value="partner2"/>
+        <remap from="~/partner1" to="/quad1_tasks/sync"/>
+    </node>
+</launch>
