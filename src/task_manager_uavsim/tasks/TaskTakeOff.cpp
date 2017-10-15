@@ -13,6 +13,7 @@ TaskIndicator TaskTakeOff::initialise()
     xl = p.x; yl = p.y; yawl = p.theta;
     env->resetGoalReachedFlag();
     env->publishGoal(xl,yl,cfg.height,yawl);
+    lastPubTime = ros::Time::now();
     return TaskStatus::TASK_INITIALISED;
 }
 
@@ -20,14 +21,18 @@ TaskIndicator TaskTakeOff::initialise()
 TaskIndicator TaskTakeOff::iterate()
 { 
     if (env->isGoalReached()) {
+        ROS_INFO("Take-Off Successful");
         return TaskStatus::TASK_COMPLETED;
     }         
-    env->publishGoal(xl,yl,cfg.height,yawl);
+    if ((ros::Time::now() - lastPubTime).toSec() > 1.0) {
+        lastPubTime = ros::Time::now();
+        env->publishGoal(xl,yl,cfg.height,yawl);
+    }
+    return TaskStatus::TASK_RUNNING;
 }
 
 TaskIndicator TaskTakeOff::terminate()
 {
-    ROS_INFO("Take-Off Successful");
     return TaskStatus::TASK_TERMINATED;
 }
 

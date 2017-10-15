@@ -10,6 +10,9 @@ using namespace task_manager_lib;
 namespace task_manager_uavsim {
     class TaskGoTo : public TaskInstance<TaskGoToConfig, UAVEnv>
     {
+        protected:
+            ros::Time lastPubTime;
+
         public:
             TaskGoTo(TaskDefinitionPtr def, TaskEnvironmentPtr env) : Parent(def,env) {}
             virtual ~TaskGoTo() {};

@@ -12,6 +12,7 @@ namespace task_manager_uavsim {
     class TaskLand : public TaskInstance<TaskLandConfig,UAVEnv>
     {
         protected:
+            ros::Time lastPubTime;
             double xl,yl,yawl; // current value so that landing only affect z.
 
         public:

@@ -11,6 +11,7 @@ TaskIndicator TaskGoTo::initialise()  {
     ROS_INFO("TaskGoTo: Going to (%.2f,%.2f)",cfg.goal_x,cfg.goal_y);
     env->resetGoalReachedFlag();
     env->publishGoal(cfg.goal_x,cfg.goal_y,cfg.goal_z, cfg.goal_heading);
+    lastPubTime = ros::Time::now();
     return TaskStatus::TASK_INITIALISED;
 }
             
@@ -21,7 +22,10 @@ TaskIndicator TaskGoTo::iterate()
 		return TaskStatus::TASK_COMPLETED;
     }
         
-    env->publishGoal(cfg.goal_x,cfg.goal_y,cfg.goal_z, cfg.goal_heading);
+    if ((ros::Time::now() - lastPubTime).toSec() > 1.0) {
+        lastPubTime = ros::Time::now();
+        env->publishGoal(cfg.goal_x,cfg.goal_y,cfg.goal_z, cfg.goal_heading);
+    }
 	return TaskStatus::TASK_RUNNING;
 }
 

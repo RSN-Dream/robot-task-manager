@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <launch>
+    <param name="use_sim_time" value="False"/>
     <node name="quad1_tasks" pkg="task_manager_uavsim" type="task_server_uavsim"  output="screen">
         <param name="lib_path" value="$(find task_manager_uavsim)/tasks"/>
         <param name="my_id" value="1"/>

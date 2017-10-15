@@ -1,9 +1,10 @@
 #!/usr/bin/python
 # ROS specific imports
-import roslib; roslib.load_manifest('task_manager_uav')
+import roslib; roslib.load_manifest('task_manager_uavsim')
 import rospy
 from math import *
 from task_manager_lib.TaskClient import *
+import traceback
 
 rospy.init_node('task_client',anonymous=True)
 server_node = rospy.get_param("~server","/quad2_tasks")
@@ -18,11 +19,15 @@ wp = [ [0., 0., 1.0, 0.0],
         [0., 0., 1.0, 0.0]] 
 
 
-tc.TakeOff()
-for p in wp:
-    tc.GoTo(goal_x=p[0],goal_y=p[1], goal_z=p[2],goal_heading=p[3])
+try:
+    tc.TakeOff()
+    for p in wp:
+        tc.GoTo(goal_x=p[0],goal_y=p[1], goal_z=p[2],goal_heading=p[3])
 
-tc.Land()
+    tc.Land()
+except:
+    traceback.print_exc()
+    rospy.spin()
 
 rospy.loginfo("Mission completed")
 

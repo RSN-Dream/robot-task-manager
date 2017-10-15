@@ -13,6 +13,7 @@ TaskIndicator TaskLand::initialise()
     xl = p.x; yl = p.y; yawl = p.theta;
     env->resetGoalReachedFlag();
     env->publishGoal(xl,yl,0,yawl);
+    lastPubTime = ros::Time::now();
     return TaskStatus::TASK_INITIALISED;
 }
 
@@ -20,15 +21,18 @@ TaskIndicator TaskLand::initialise()
 TaskIndicator TaskLand::iterate()
 { 
     if (env->isGoalReached()) {
+        ROS_INFO("Landing Successful");
         return TaskStatus::TASK_COMPLETED;
     }         
-    env->publishGoal(xl,yl,0,yawl);
+    if ((ros::Time::now() - lastPubTime).toSec() > 1.0) {
+        lastPubTime = ros::Time::now();
+        env->publishGoal(xl,yl,0,yawl);
+    }
     return TaskStatus::TASK_RUNNING;
 }
 
 TaskIndicator TaskLand::terminate()
 {
-    ROS_INFO("Landing Successful");
     return TaskStatus::TASK_TERMINATED;
 }
 
