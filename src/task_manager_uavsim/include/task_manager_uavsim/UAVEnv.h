@@ -17,11 +17,15 @@ namespace task_manager_uavsim {
             unsigned int quadId;
             ros::Subscriber poseSub;
             ros::Subscriber wpReachedSub;
+            ros::Subscriber motorStateSub;
             ros::Publisher goalPub;
+            ros::Publisher motorPub;
 
             void pose_cb(const geometry_msgs::Twist msg);
+            void motor_cb(const std_msgs::Bool msg);
             void wpr_cb(const std_msgs::Bool msg);
             bool wpReached;
+            bool motorState;
             // Twist is probably not the right type for this message
             geometry_msgs::Twist currentPose;
 
@@ -33,6 +37,10 @@ namespace task_manager_uavsim {
 
             geometry_msgs::Pose getPose() const ;
 
+            bool isMotorOn() const {
+                return motorState;
+            }
+
             void publishGoal(double x, double y, double z, double yaw) {
                 geometry_msgs::Twist cmd;
                 cmd.linear.x = x;
@@ -40,6 +48,12 @@ namespace task_manager_uavsim {
                 cmd.linear.z = z;
                 cmd.angular.z = yaw;
                 goalPub.publish(cmd);
+            }
+
+            void publishMotorState(bool state) {
+                std_msgs::Bool msg;
+                msg.data = state;
+                motorPub.publish(msg);
             }
 
             void resetGoalReachedFlag() {

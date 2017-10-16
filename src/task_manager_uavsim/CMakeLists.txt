@@ -39,6 +39,7 @@ generate_dynamic_reconfigure_options(
     cfg/TaskTakeOff.cfg
     cfg/TaskLand.cfg
     cfg/TaskWaitForLowBattery.cfg
+    cfg/TaskSetMotor.cfg
 )
 
 
@@ -117,6 +118,10 @@ ADD_DEPENDENCIES(UAVSimTaskLand ${${PROJECT_NAME}_EXPORTED_TARGETS})
 ADD_LIBRARY( UAVSimTaskWaitForLowBattery SHARED tasks/TaskWaitForLowBattery.cpp)
 TARGET_LINK_LIBRARIES(UAVSimTaskWaitForLowBattery ${catkin_LIBRARIES} dl)
 ADD_DEPENDENCIES(UAVSimTaskWaitForLowBattery ${${PROJECT_NAME}_EXPORTED_TARGETS})
+
+ADD_LIBRARY( UAVSimTaskSetMotor SHARED tasks/TaskSetMotor.cpp)
+TARGET_LINK_LIBRARIES(UAVSimTaskSetMotor ${catkin_LIBRARIES} dl)
+ADD_DEPENDENCIES(UAVSimTaskSetMotor ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
 #############
 ## Install ##

@@ -11,9 +11,11 @@ UAVEnv::UAVEnv(ros::NodeHandle & n,
     sprintf(idstr,"%d",quadId);
 
     goalPub = nh.advertise<geometry_msgs::Twist>(std::string("/goQuad")+idstr,1);
+    motorPub = nh.advertise<std_msgs::Bool>(std::string("/motorQuad")+idstr,1);
 
     poseSub = nh.subscribe(std::string("/poseQuad")+idstr,1,&UAVEnv::pose_cb,this);
     wpReachedSub = nh.subscribe(std::string("/wpReached")+idstr,1,&UAVEnv::wpr_cb,this);
+    motorStateSub = nh.subscribe(std::string("/motorStatus")+idstr,1,&UAVEnv::motor_cb,this);
 }
 
 void UAVEnv::pose_cb(const geometry_msgs::Twist msg) 
@@ -25,6 +27,11 @@ void UAVEnv::pose_cb(const geometry_msgs::Twist msg)
 void UAVEnv::wpr_cb(const std_msgs::Bool msg) 
 {
     wpReached = msg.data;
+}
+
+void UAVEnv::motor_cb(const std_msgs::Bool msg) 
+{
+    motorState = msg.data;
 }
 
 

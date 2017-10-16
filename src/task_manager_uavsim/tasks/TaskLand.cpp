@@ -12,7 +12,7 @@ TaskIndicator TaskLand::initialise()
     geometry_msgs::Pose2D p = env->getPose2D();
     xl = p.x; yl = p.y; yawl = p.theta;
     env->resetGoalReachedFlag();
-    env->publishGoal(xl,yl,0,yawl);
+    env->publishGoal(xl,yl,0.2,yawl);
     lastPubTime = ros::Time::now();
     return TaskStatus::TASK_INITIALISED;
 }
@@ -26,7 +26,7 @@ TaskIndicator TaskLand::iterate()
     }         
     if ((ros::Time::now() - lastPubTime).toSec() > 1.0) {
         lastPubTime = ros::Time::now();
-        env->publishGoal(xl,yl,0,yawl);
+        env->publishGoal(xl,yl,0.2,yawl);
     }
     return TaskStatus::TASK_RUNNING;
 }
