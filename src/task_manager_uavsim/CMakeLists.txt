@@ -35,6 +35,7 @@ find_package(Boost REQUIRED COMPONENTS system)
 
 generate_dynamic_reconfigure_options(
     cfg/TaskGoTo.cfg
+    cfg/TaskSetHeading.cfg
     cfg/TaskTakeOff.cfg
     cfg/TaskLand.cfg
     cfg/TaskWaitForLowBattery.cfg
@@ -100,6 +101,10 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_SHARE
 ADD_LIBRARY( UAVSimTaskGoTo SHARED tasks/TaskGoTo.cpp)
 TARGET_LINK_LIBRARIES(UAVSimTaskGoTo ${catkin_LIBRARIES} dl)
 ADD_DEPENDENCIES(UAVSimTaskGoTo ${${PROJECT_NAME}_EXPORTED_TARGETS})
+
+ADD_LIBRARY( UAVSimTaskSetHeading SHARED tasks/TaskSetHeading.cpp)
+TARGET_LINK_LIBRARIES(UAVSimTaskSetHeading ${catkin_LIBRARIES} dl)
+ADD_DEPENDENCIES(UAVSimTaskSetHeading ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
 ADD_LIBRARY( UAVSimTaskTakeOff SHARED tasks/TaskTakeOff.cpp)
 TARGET_LINK_LIBRARIES(UAVSimTaskTakeOff ${catkin_LIBRARIES} dl)

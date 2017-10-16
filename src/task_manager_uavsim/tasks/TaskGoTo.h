@@ -11,6 +11,7 @@ namespace task_manager_uavsim {
     class TaskGoTo : public TaskInstance<TaskGoToConfig, UAVEnv>
     {
         protected:
+            double current_heading;
             ros::Time lastPubTime;
 
         public:

@@ -1,24 +1,23 @@
 #include <math.h>
 #include <tf/transform_datatypes.h>
-#include "TaskGoTo.h"
-#include "task_manager_uavsim/TaskGoToConfig.h"
+#include "TaskSetHeading.h"
+#include "task_manager_uavsim/TaskSetHeadingConfig.h"
 using namespace task_manager_msgs;
 using namespace task_manager_lib;
 using namespace task_manager_uavsim;
 
 
-TaskIndicator TaskGoTo::initialise()  {
-    ROS_INFO("TaskGoTo: Going to (%.2f,%.2f)",cfg.goal_x,cfg.goal_y);
-    geometry_msgs::Pose2D p = env->getPose2D();
-    current_heading = p.theta;
+TaskIndicator TaskSetHeading::initialise()  {
+    geometry_msgs::Pose p = env->getPose();
+    x=p.position.x; y=p.position.y; z=p.position.z;
     env->resetGoalReachedFlag();
-    env->publishGoal(cfg.goal_x,cfg.goal_y,cfg.goal_z, current_heading);
+    env->publishGoal(x,y,z, cfg.goal_heading);
     lastPubTime = ros::Time::now();
     return TaskStatus::TASK_INITIALISED;
 }
             
 
-TaskIndicator TaskGoTo::iterate()
+TaskIndicator TaskSetHeading::iterate()
 {
     if (env->isGoalReached()) {
 		return TaskStatus::TASK_COMPLETED;
@@ -26,14 +25,14 @@ TaskIndicator TaskGoTo::iterate()
         
     if ((ros::Time::now() - lastPubTime).toSec() > 1.0) {
         lastPubTime = ros::Time::now();
-        env->publishGoal(cfg.goal_x,cfg.goal_y,cfg.goal_z, current_heading);
+        env->publishGoal(x,y,z, cfg.goal_heading);
     }
 	return TaskStatus::TASK_RUNNING;
 }
 
-TaskIndicator TaskGoTo::terminate()
+TaskIndicator TaskSetHeading::terminate()
 {
 	return Parent::terminate();
 }
 
-DYNAMIC_TASK(TaskFactoryGoTo);
+DYNAMIC_TASK(TaskFactorySetHeading);

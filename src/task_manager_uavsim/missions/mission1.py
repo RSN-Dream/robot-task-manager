@@ -23,7 +23,8 @@ wp = [ [0., 0., 0.5, 0.0],
 try:
     tc.TakeOff()
     for p in wp:
-        tc.GoTo(goal_x=p[0],goal_y=p[1], goal_z=p[2],goal_heading=p[3])
+        tc.GoTo(goal_x=p[0],goal_y=p[1], goal_z=p[2])
+        tc.SetHeading(goal_heading=p[3])
 
     tc.Land()
 except:
