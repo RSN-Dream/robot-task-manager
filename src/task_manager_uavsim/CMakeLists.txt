@@ -40,6 +40,7 @@ generate_dynamic_reconfigure_options(
     cfg/TaskLand.cfg
     cfg/TaskWaitForLowBattery.cfg
     cfg/TaskSetMotor.cfg
+    cfg/TaskRadioScan.cfg
 )
 
 
@@ -122,6 +123,10 @@ ADD_DEPENDENCIES(UAVSimTaskWaitForLowBattery ${${PROJECT_NAME}_EXPORTED_TARGETS}
 ADD_LIBRARY( UAVSimTaskSetMotor SHARED tasks/TaskSetMotor.cpp)
 TARGET_LINK_LIBRARIES(UAVSimTaskSetMotor ${catkin_LIBRARIES} dl)
 ADD_DEPENDENCIES(UAVSimTaskSetMotor ${${PROJECT_NAME}_EXPORTED_TARGETS})
+
+ADD_LIBRARY( UAVSimTaskRadioScan SHARED tasks/TaskRadioScan.cpp)
+TARGET_LINK_LIBRARIES(UAVSimTaskRadioScan ${catkin_LIBRARIES} dl)
+ADD_DEPENDENCIES(UAVSimTaskRadioScan ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
 #############
 ## Install ##

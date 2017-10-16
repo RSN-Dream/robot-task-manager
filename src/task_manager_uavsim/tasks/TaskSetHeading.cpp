@@ -19,7 +19,8 @@ TaskIndicator TaskSetHeading::initialise()  {
 
 TaskIndicator TaskSetHeading::iterate()
 {
-    if (env->isGoalReached()) {
+    geometry_msgs::Pose2D p = env->getPose2D();
+    if (env->isGoalReached() && (fabs(remainder(cfg.goal_heading - p.theta,2*M_PI)) < 0.05)) {
 		return TaskStatus::TASK_COMPLETED;
     }
         
