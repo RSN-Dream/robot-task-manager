@@ -65,7 +65,7 @@ namespace task_manager_uavsim {
             }
 
             double getBatteryVoltage() const {
-                return 0.0; // Not implemented
+                return 12.0; // Not implemented
             }
     };
 
