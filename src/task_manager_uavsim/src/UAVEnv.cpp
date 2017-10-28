@@ -16,6 +16,7 @@ UAVEnv::UAVEnv(ros::NodeHandle & n,
     poseSub = nh.subscribe(std::string("/poseQuad")+idstr,1,&UAVEnv::pose_cb,this);
     wpReachedSub = nh.subscribe(std::string("/wpReached")+idstr,1,&UAVEnv::wpr_cb,this);
     motorStateSub = nh.subscribe(std::string("/motorStatus")+idstr,1,&UAVEnv::motor_cb,this);
+    batterySub = nh.subscribe(std::string("/powerQuad")+idstr,1,&UAVEnv::battery_cb,this);
 }
 
 void UAVEnv::pose_cb(const geometry_msgs::Twist msg) 
@@ -32,6 +33,11 @@ void UAVEnv::wpr_cb(const std_msgs::Bool msg)
 void UAVEnv::motor_cb(const std_msgs::Bool msg) 
 {
     motorState = msg.data;
+}
+
+void UAVEnv::battery_cb(const std_msgs::Float32 msg) 
+{
+    batteryVoltage = msg.data;
 }
 
 

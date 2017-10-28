@@ -9,6 +9,7 @@
 #include <task_manager_lib/TaskDefinition.h>
 #include <task_manager_sync/TaskEnvironmentSync.h>
 #include <std_msgs/Bool.h>
+#include <std_msgs/Float32.h>
 
 namespace task_manager_uavsim {
     class UAVEnv: public task_manager_sync::TaskEnvironmentSync
@@ -20,12 +21,15 @@ namespace task_manager_uavsim {
             ros::Subscriber motorStateSub;
             ros::Publisher goalPub;
             ros::Publisher motorPub;
+            ros::Subscriber batterySub;
 
             void pose_cb(const geometry_msgs::Twist msg);
             void motor_cb(const std_msgs::Bool msg);
             void wpr_cb(const std_msgs::Bool msg);
             bool wpReached;
             bool motorState;
+            void battery_cb(const std_msgs::Float32 msg);
+            double batteryVoltage;			
             // Twist is probably not the right type for this message
             geometry_msgs::Twist currentPose;
 
@@ -65,7 +69,7 @@ namespace task_manager_uavsim {
             }
 
             double getBatteryVoltage() const {
-                return 12.0; // Not implemented
+                return batteryVoltage; // Not checked
             }
     };
 
