@@ -11,55 +11,37 @@ from std_msgs.msg import Float32
 import json
 import io
 
-try:
-    to_unicode = unicode
-except NameError:
-    to_unicode = str
-
-
-rospy.init_node('battery_quad1',anonymous=True)
-#server_node = rospy.get_param("~server","/quad1_tasks")
-#default_period = rospy.get_param("~period",0.2)
-#tc = TaskClient(server_node,default_period)
-
-
+powerLevel = 100 # power level at the beginning
+quadPos = [None, None] # quadPos at two instants Past & Current 
 def callback_pose(msg):
-	try:
-		# Read JSON file
-		with open('dataQuad1.json') as data_file:
-			data_loaded = json.load(data_file)
-			quadPos = data_loaded["position"]
-			powerLevel = data_loaded["power"]
-	except:
-		powerLevel = 100 # power level at the beginning
-		quadPos = [0,0,0]
+	global quadPos
+	global powerLevel
 	
-	quadPosNext = [msg.linear.x,msg.linear.y,msg.linear.z]
-	deltaPos = [quadPosNext[0]-quadPos[0],quadPosNext[1]-quadPos[1],quadPosNext[2]-quadPos[2]]
-	distance = sqrt(deltaPos[0]**2+deltaPos[1]**2+deltaPos[2]**2)
+	currentPose = [msg.linear.x,msg.linear.y,msg.linear.z]
+	quadPos[0] = quadPos[1]	
+	quadPos[1] = currentPose
 	
+	if not quadPos[0] == None:
+		deltaPos = [quadPos[1][0]-quadPos[0][0],quadPos[1][1]-quadPos[0][1],quadPos[1][2]-quadPos[0][2]]
+		distance = sqrt(deltaPos[0]**2+deltaPos[1]**2+deltaPos[2]**2)
 
-	BATTERY_DISCHARGE_RATE_MOVING = 0.15
-	BATTERY_DISCHARGE_RATE_HOVERING = 0.03
+		BATTERY_DISCHARGE_RATE_MOVING = 0.05
+		BATTERY_DISCHARGE_RATE_HOVERING = 0.01
 
-	if distance > 0.01:  # moving
-		powerLevel -= distance * BATTERY_DISCHARGE_RATE_MOVING
-	elif distance <= 0.01 and quadPosNext[2] > 0.01: # hovering
-		powerLevel -= BATTERY_DISCHARGE_RATE_HOVERING
+		if distance > 0.01:  # moving
+			powerLevel -= distance * BATTERY_DISCHARGE_RATE_MOVING
+		elif distance <= 0.01 and quadPos[1][2] > 0.01: # hovering
+			powerLevel -= BATTERY_DISCHARGE_RATE_HOVERING
+	else:
+		quadPos[0] = currentPose
 
-
-	data = {"position": quadPosNext, "power":powerLevel}
-	# Write to JSON file
-	with io.open('dataQuad1.json', 'w', encoding='utf8') as outfile:
-		str_ = json.dumps(data,indent=4, sort_keys=True, separators=(',', ': '), ensure_ascii=False)
-		outfile.write(to_unicode(str_))
-
-	powerLvlPub = rospy.Publisher('powerQuad1', Float32, queue_size=10)
 	powerLvlPub.publish(powerLevel)
 
-
+### main 
+rospy.init_node('battery_quad1',anonymous=True)
 try:
 	rospy.Subscriber("/poseQuad1", Twist, callback_pose)
+	powerLvlPub = rospy.Publisher('powerQuad1', Float32, queue_size=10)
 	rospy.spin()
 except:
 	rospy.spin()
