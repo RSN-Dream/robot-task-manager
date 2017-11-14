@@ -15,4 +15,10 @@
         <param name="my_name" value="partner2"/>
         <remap from="~/partner1" to="/quad1_tasks/sync"/>
     </node>
+
+    <node name="quad1_power" pkg="task_manager_uavsim" type="battery_sim1.py" output="screen">
+    </node>
+
+    <node name="quad2_power" pkg="task_manager_uavsim" type="battery_sim2.py" output="screen">
+    </node>
 </launch>

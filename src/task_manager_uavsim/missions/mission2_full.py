@@ -27,7 +27,8 @@ def p2_pose_cb(msg):
 
 # subscribe to /rcvdPoseQuad1 published by the communication node, 
 # instead of directly to /poseQuad1
-sub = rospy.Subscriber("/rcvdPoseQuad1",Twist, p2_pose_cb,queue_size=1)
+sub = rospy.Subscriber("/poseQuad1",Twist, p2_pose_cb,queue_size=1)
+#sub = rospy.Subscriber("/rcvdPoseQuad1",Twist, p2_pose_cb,queue_size=1)
 
 
 try:
@@ -41,7 +42,7 @@ try:
 
     w4partner = tc.WaitForStatusSync(foreground=False,partner="partner1",status=mc.QUAD_CALLING)
     tc.addCondition(ConditionIsCompleted("Partner1",tc,w4partner))
-    w4battery = tc.WaitForLowBattery(foreground=False,threshold=9.0)
+    w4battery = tc.WaitForLowBattery(foreground=False,threshold=70.0)
     tc.addCondition(ConditionIsCompleted("Battery",tc,w4battery))
     try:
         for i,p in enumerate(wp):
