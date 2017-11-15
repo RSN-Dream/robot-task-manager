@@ -16,6 +16,12 @@
         <remap from="~/partner1" to="/quad1_tasks/sync"/>
     </node>
 
+	<arg name="marker_size" default="10.0" />
+	<arg name="max_new_marker_error" default="0.08" />
+	<arg name="max_track_error" default="0.2" />
+    <node name="ar_track_alvar1" pkg="ar_track_alvar" type="individualMarkersNoKinect" respawn="false" output="screen" args="$(arg marker_size) $(arg max_new_marker_error) $(arg max_track_error) /quad1/image_raw /quad1/visionSensorInfo /quad1" />
+    <node name="ar_track_alvar2" pkg="ar_track_alvar" type="individualMarkersNoKinect" respawn="false" output="screen" args="$(arg marker_size) $(arg max_new_marker_error) $(arg max_track_error) /quad2/image_raw /quad2/visionSensorInfo /quad2" />
+
     <node name="quad1_power" pkg="task_manager_uavsim" type="battery_sim1.py" output="screen">
     </node>
 

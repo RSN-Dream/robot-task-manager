@@ -40,8 +40,8 @@ def callback_pose(msg):
 ### main 
 rospy.init_node('battery_quad2',anonymous=True)
 try:
-	rospy.Subscriber("/poseQuad2", Twist, callback_pose)
-	powerLvlPub = rospy.Publisher('powerQuad2', Float32, queue_size=10)
+	rospy.Subscriber("/quad2/pose", Twist, callback_pose)
+	powerLvlPub = rospy.Publisher('/quad2/power', Float32, queue_size=10)
 	rospy.spin()
 except:
 	rospy.spin()

@@ -27,7 +27,7 @@ def p2_pose_cb(msg):
 
 # subscribe to /rcvdPoseQuad1 published by the communication node, 
 # instead of directly to /poseQuad1
-sub = rospy.Subscriber("/poseQuad1",Twist, p2_pose_cb,queue_size=1)
+sub = rospy.Subscriber("/quad1/pose",Twist, p2_pose_cb,queue_size=1)
 #sub = rospy.Subscriber("/rcvdPoseQuad1",Twist, p2_pose_cb,queue_size=1)
 
 

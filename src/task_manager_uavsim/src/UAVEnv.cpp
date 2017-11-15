@@ -7,16 +7,17 @@ using namespace task_manager_uavsim;
 UAVEnv::UAVEnv(ros::NodeHandle & n, 
         const std::string & name, unsigned int id) : task_manager_sync::TaskEnvironmentSync(n,name,"sync"), quadId(id)
 {
-    char idstr[128];
-    sprintf(idstr,"%d",quadId);
+    char idstrc[128];
+    sprintf(idstrc,"/quad%d",quadId);
+    std::string idstr(idstrc);
 
-    goalPub = nh.advertise<geometry_msgs::Twist>(std::string("/goQuad")+idstr,1);
-    motorPub = nh.advertise<std_msgs::Bool>(std::string("/motorQuad")+idstr,1);
+    goalPub = nh.advertise<geometry_msgs::Twist>(idstr+"/go",1);
+    motorPub = nh.advertise<std_msgs::Bool>(idstr+"/motor",1);
 
-    poseSub = nh.subscribe(std::string("/poseQuad")+idstr,1,&UAVEnv::pose_cb,this);
-    wpReachedSub = nh.subscribe(std::string("/wpReached")+idstr,1,&UAVEnv::wpr_cb,this);
-    motorStateSub = nh.subscribe(std::string("/motorStatus")+idstr,1,&UAVEnv::motor_cb,this);
-    batterySub = nh.subscribe(std::string("/powerQuad")+idstr,1,&UAVEnv::battery_cb,this);
+    poseSub = nh.subscribe(idstr+"/pose",1,&UAVEnv::pose_cb,this);
+    wpReachedSub = nh.subscribe(idstr+"/wp_reached",1,&UAVEnv::wpr_cb,this);
+    motorStateSub = nh.subscribe(idstr+"/motor_status",1,&UAVEnv::motor_cb,this);
+    batterySub = nh.subscribe(idstr+"/power",1,&UAVEnv::battery_cb,this);
 }
 
 void UAVEnv::pose_cb(const geometry_msgs::Twist msg) 
