@@ -135,8 +135,8 @@ thread = threading.Thread(target=read_from_port, args=(serial_port,))
 thread.start()
 
 try:
-    rospy.Subscriber("/poseQuad1", Twist, callback_send_pose)
-    rcvdPosePub = rospy.Publisher('/rcvdPoseQuad2', Twist, queue_size=10)
+    rospy.Subscriber("/quad1/pose", Twist, callback_send_pose)
+    rcvdPosePub = rospy.Publisher('/quad2/rcvdPose', Twist, queue_size=10)
 
     RATE_VAL = 4
     rate = rospy.Rate(RATE_VAL) # 4hz
