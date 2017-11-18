@@ -19,8 +19,22 @@
 	<arg name="marker_size" default="10.0" />
 	<arg name="max_new_marker_error" default="0.08" />
 	<arg name="max_track_error" default="0.2" />
-    <node name="ar_track_alvar1" pkg="ar_track_alvar" type="individualMarkersNoKinect" respawn="false" output="screen" args="$(arg marker_size) $(arg max_new_marker_error) $(arg max_track_error) /quad1/image_raw /quad1/visionSensorInfo /quad1" />
-    <node name="ar_track_alvar2" pkg="ar_track_alvar" type="individualMarkersNoKinect" respawn="false" output="screen" args="$(arg marker_size) $(arg max_new_marker_error) $(arg max_track_error) /quad2/image_raw /quad2/visionSensorInfo /quad2" />
+    <!--><node name="ar_track_alvar1" pkg="ar_track_alvar" type="individualMarkersNoKinect" respawn="false" output="screen" args="$(arg marker_size) $(arg max_new_marker_error) $(arg max_track_error) /quad1/image_raw /quad1/visionSensorInfo /quad1" /><-->
+    <!--><node name="ar_track_alvar2" pkg="ar_track_alvar" type="individualMarkersNoKinect" respawn="false" output="screen" args="$(arg marker_size) $(arg max_new_marker_error) $(arg max_track_error) /quad2/image_raw /quad2/visionSensorInfo /quad2" /><-->
+
+    <arg name="output_frame" default="/quad1" />
+    <arg name="cam_image_topic" default="/quad1/image_raw" />
+	<arg name="cam_info_topic" default="/quad1/image_raw/camera_info" />
+    <node name="ar_track_alvar" pkg="ar_track_alvar" type="individualMarkersNoKinect" respawn="false" output="screen">
+		<param name="marker_size"           type="double" value="$(arg marker_size)" />
+		<param name="max_new_marker_error"  type="double" value="$(arg max_new_marker_error)" />
+		<param name="max_track_error"       type="double" value="$(arg max_track_error)" />
+		<param name="output_frame"          type="string" value="$(arg output_frame)" />
+
+		<remap from="camera_image"  to="$(arg cam_image_topic)" />
+		<remap from="camera_info"   to="$(arg cam_info_topic)" />
+	</node>
+
 
     <node name="quad1_power" pkg="task_manager_uavsim" type="battery_sim1.py" output="screen">
     </node>
